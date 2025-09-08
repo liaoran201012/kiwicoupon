@@ -9,27 +9,45 @@
 
   gtag('config', 'G-JTWW5K9Z4S');
 </script>
- <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    // 选择所有“View Code”按钮
-    const buttons = document.querySelectorAll('.coupon_item_button.code');
+ document.addEventListener('DOMContentLoaded', function () {
+  // 选择所有优惠券按钮 - 使用更灵活的选择器
+  const buttons = document.querySelectorAll('.coupon_item_button');
 
-    buttons.forEach(function (button) {
-      button.addEventListener('click', function () {
-        // 你可以获取按钮的文字或 coupon code（如果有）
-        const buttonText = button.innerText.trim(); // 比如 "View Code"
-        const couponCode = button.closest('.coupon_item')?.dataset.code || 'unknown';
+  buttons.forEach(function (button) {
+    button.addEventListener('click', function () {
+      // 获取按钮类型
+      const isCodeButton = button.classList.contains('code');
+      const buttonType = isCodeButton ? 'code' : 'deal';
+      
+      // 获取优惠券信息
+      const couponItem = button.closest('.coupon_item');
+      const couponCode = couponItem?.getAttribute('data-code') || 'unknown';
+      const couponId = couponItem?.getAttribute('data-coupon_id') || 'unknown';
+      
+      // 获取优惠内容
+      const titleElement = couponItem?.querySelector('.title');
+      const couponTitle = titleElement?.textContent?.trim() || 'unknown';
 
-        // 发送 GA4 事件
-        gtag('event', 'view_code_click', {
-          'event_category': 'Button',
-          'event_label': `Coupon: ${couponCode}`,
-          'value': 1
-        });
+      // 发送GA4事件 - 使用标准事件名
+      gtag('event', 'select_promotion', {
+        'event_category': 'engagement',
+        'event_label': `${buttonType}: ${couponCode}`,
+        'promotion_id': couponId,
+        'promotion_name': couponTitle,
+        'creative_slot': buttonType,
+        'value': 1
+      });
+
+      // 可选：同时发送自定义事件用于更详细的分析
+      gtag('event', 'coupon_click', {
+        'coupon_type': buttonType,
+        'coupon_code': couponCode,
+        'coupon_id': couponId,
+        'coupon_title': couponTitle
       });
     });
   });
-</script>
+});
 
   <!-- ========== Preload ========== -->
   <link href="https://upload.wikimedia.org/" rel="preconnect dns-prefetch">
@@ -1121,6 +1139,7 @@
   
   
   </body></html>
+
 
 
 
