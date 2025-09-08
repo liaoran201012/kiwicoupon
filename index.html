@@ -7,6 +7,29 @@
   gtag('js', new Date());
 
   gtag('config', 'G-0H7TJEZCJY');
+
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // 选择所有“View Code”按钮
+    const buttons = document.querySelectorAll('.coupon_item_button.code');
+
+    buttons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        // 你可以获取按钮的文字或 coupon code（如果有）
+        const buttonText = button.innerText.trim(); // 比如 "View Code"
+        const couponCode = button.closest('.coupon_item')?.dataset.code || 'unknown';
+
+        // 发送 GA4 事件
+        gtag('event', 'view_code_click', {
+          'event_category': 'Button',
+          'event_label': `Coupon: ${couponCode}`,
+          'value': 1
+        });
+      });
+    });
+  });
+</script>
 </script>
   <!-- ========== Preload ========== -->
   <link href="https://upload.wikimedia.org/" rel="preconnect dns-prefetch">
@@ -1098,4 +1121,5 @@
   
   
   </body></html>
+
 
