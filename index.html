@@ -7,30 +7,34 @@
   gtag('js', new Date());
 
   gtag('config', 'G-0H7TJEZCJY');
+</script>
 
-
-  <script>
   document.addEventListener('DOMContentLoaded', function () {
-    // 选择所有“View Code”按钮
-    const buttons = document.querySelectorAll('.coupon_item_button.code');
-
-    buttons.forEach(function (button) {
-      button.addEventListener('click', function () {
-        // 你可以获取按钮的文字或 coupon code（如果有）
-        const buttonText = button.innerText.trim(); // 比如 "View Code"
-        const couponCode = button.closest('.coupon_item')?.dataset.code || 'unknown';
-
-        // 发送 GA4 事件
-        gtag('event', 'view_code_click', {
-          'event_category': 'Button',
-          'event_label': `Coupon: ${couponCode}`,
-          'value': 1
-        });
+  // 1. 追踪 View Code
+  document.querySelectorAll('.coupon_item_button.code').forEach(btn => {
+    btn.addEventListener('click', function () {
+      const code = this.closest('.coupon_item')?.dataset.code || 'unknown';
+      gtag('event', 'view_code_click', {
+        event_category: 'Button',
+        event_label: `Code: ${code}`,
+        value: 1
       });
     });
   });
-</script>
-</script>
+
+  // 2. 追踪 Get Deal（如果有）
+  document.querySelectorAll('.coupon_item_button.deal').forEach(btn => {
+    btn.addEventListener('click', function () {
+      const title = this.closest('.coupon_item')?.querySelector('.title')?.innerText.trim() || 'unknown';
+      gtag('event', 'get_deal_click', {
+        event_category: 'Button',
+        event_label: `Deal: ${title}`,
+        value: 1
+      });
+    });
+  });
+});
+
   <!-- ========== Preload ========== -->
   <link href="https://upload.wikimedia.org/" rel="preconnect dns-prefetch">
   <link as="image" href="https://sanctuarybluecharleston.online/today/images/nav/logo@2x.png" rel="preload">
@@ -1121,5 +1125,6 @@
   
   
   </body></html>
+
 
 
